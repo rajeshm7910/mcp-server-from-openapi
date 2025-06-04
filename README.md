@@ -6,6 +6,8 @@ A MCP server implementation from OpenAPI specifications, supporting both SSE (Se
 
 - Python 3.x
 - pip (Python package manager)
+- Anthropic API key (for MCP clients)
+- Google API key (for ADK agents)
 
 ## Installation
 
@@ -77,14 +79,34 @@ Here are the headers from the response:
 
 ### ADK Agents
 
-1. Navigate to the Clients directory
-2. Configure the environment:
+#### Prerequisites
+1. Install ADK:
+```bash
+pip install google-adk
+```
+
+#### Setup Steps
+1. **Important**: Streaming mode workaround
+   - Download the latest `mcp_session_manager.py` from [Google ADK repository](https://github.com/google/adk-python/blob/main/src/google/adk/tools/mcp_tool/mcp_session_manager.py)
+   - Replace the existing file in your ADK installation:
+     ```bash
+     # Typical path (adjust Python version as needed)
+     cp mcp_session_manager.py venv/lib/python3.13/site-packages/google/adk/tools/mcp_tool/
+     ```
+
+2. Navigate to the Clients directory:
+```bash
+cd client
+```
+
+3. Configure the environment:
    - Add the following to `.env` file in both `httpb_sse_agent` and `httpbin_stream_agent` directories:
    ```
    GOOGLE_GENAI_USE_VERTEXAI="False"
    GOOGLE_API_KEY="your_google_api_key_here"
    ```
-3. Start the ADK web interface:
+
+4. Start the ADK web interface:
 ```bash
 adk web
 ```
@@ -95,6 +117,14 @@ adk web
 - Support for both SSE and streaming responses
 - Multiple client implementations (MCP and ADK)
 - Easy configuration through environment variables
+
+## Troubleshooting
+
+### ADK Streaming Mode Issues
+If you encounter issues with ADK agents in streaming mode:
+1. Verify you've replaced the `mcp_session_manager.py` file
+2. Check your Google API key is correctly set in the `.env` files
+3. Ensure you're using the latest version of ADK
 
 ## License
 
